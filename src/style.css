@@ -1,3 +1,325 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/**
+The code comes from https://github.com/RedEdge967/MacOS-CSS/tree/master
+**/
+
+.window {
+	-webkit-transform-style: preserve-3d;
+	-moz-transform-style: preserve-3d;
+	transform-style: preserve-3d;
+	overflow: hidden;
+	height: 100%;
+	box-shadow: 0 40px 60px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 0, 0, 0.1),
+		0 0 0 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.5);
+	transition: all 0.1s, top 0.1s ease-in-out, left 0.1s ease-in-out,
+		transform 0.1s ease-in-out, width 0.1s ease-in-out, height 0.1s ease-in-out,
+		z-index 0ms, box-shadow 0ms;
+	z-index: 0;
+	-webkit-transform-origin: center center;
+	-moz-transform-origin: center center;
+	transform-origin: center center;
+	-webkit-transform: none;
+	-moz-transform: none;
+	transform: none;
+	border-radius: 10px;
+	background: #1e1e1f;
+	color: #fff;
+	z-index: 1;
+}
+.window:after {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+	border-radius: 10px;
+	z-index: 999999;
+	pointer-events: none;
+}
+
+.window__handler {
+	position: relative;
+	overflow: hidden;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 24px;
+	width: 100%;
+	cursor: default;
+	z-index: 9999;
+}
+.window__handler:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.05);
+	background-image: linear-gradient(
+		to bottom,
+		rgba(0, 0, 0, 0.025),
+		rgba(0, 0, 0, 0.05)
+	);
+	box-shadow: inset 0 -1px 0 0 rgba(255, 255, 255, 0.05),
+		0 1px 5px 0 rgba(0, 0, 0, 0.1);
+	z-index: 0;
+}
+.window__handler .window__title {
+	position: absolute;
+	top: 0;
+	left: 25%;
+	width: 50%;
+	height: 24px;
+	line-height: 24px;
+	text-align: center;
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.25);
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	font-family: -apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto,
+		'Helvetica Neue', Arial, sans-serif;
+}
+.window__handler .window__controls {
+	position: relative;
+	top: 0;
+	display: inline-block;
+	height: 24px;
+	left: 5px;
+	z-index: 1;
+}
+.window__handler .window__controls:hover .window__minimize::before {
+	background: rgba(0, 0, 0, 0.75);
+}
+.window__handler .window__controls:hover .window__close::before,
+.window__handler .window__controls:hover .window__close::after {
+	background: rgba(0, 0, 0, 0.75);
+}
+.window__handler .window__controls:hover .window__maximize::before,
+.window__handler .window__controls:hover .window__maximize::after {
+	border-color: transparent rgba(0, 0, 0, 0.75) transparent transparent;
+}
+.window__handler .window__controls .window__minimize {
+	background: #f5c350;
+}
+.window__handler .window__controls .window__maximize {
+	background: #65cd57;
+}
+.window__handler .window__controls .window__close {
+	background: #ff5d5a;
+}
+.window__handler .window__controls > a {
+	position: relative;
+	display: inline-block;
+	float: left;
+	height: 12px;
+	width: 12px;
+	margin: 6px 4px;
+	padding: 0;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 100%;
+	overflow: hidden;
+}
+.window__handler .window__controls > a:active {
+	filter: brightness(0.5);
+}
+.window__handler .window__controls > a::before,
+.window__handler .window__controls > a::after {
+	content: '';
+	position: absolute;
+	transition: 0.1s;
+}
+.window__handler .window__controls > a.window__minimize::before {
+	width: calc(100% - 4px);
+	height: 1px;
+	top: 50%;
+	left: 2px;
+}
+.window__handler .window__controls > a.window__maximize::before {
+	width: 0;
+	height: 0;
+	top: calc(50% - 3px);
+	left: calc(50% - 1px);
+	border-style: solid;
+	border-width: 0 4px 4px 0;
+	border-color: transparent;
+}
+.window__handler .window__controls > a.window__maximize::after {
+	width: 0;
+	height: 0;
+	top: calc(50% - 1px);
+	left: calc(50% - 3px);
+	border-style: solid;
+	border-width: 0 4px 4px 0;
+	border-color: transparent;
+	transform-origin: center center;
+	transform: rotateZ(180deg);
+}
+.window__handler .window__controls > a.window__close::before,
+.window__handler .window__controls > a.window__close::after {
+	width: calc(100% - 4px);
+	height: 1px;
+	top: 50%;
+	left: 2px;
+	transform: rotateZ(45deg);
+}
+.window__handler .window__controls > a.window__close::after {
+	transform: rotateZ(-45deg);
+}
+.window__handler .window__controls > a.disabled {
+	background: rgba(255, 255, 255, 0.075) !important;
+	pointer-events: none;
+}
+.window__handler .window__controls > a.disabled:before,
+.window__handler .window__controls > a.disabled:after {
+	opacity: 0;
+}
+.window__handler .window__actions {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 36px;
+	width: 100%;
+	padding: 0 6px;
+	opacity: 0.5;
+}
+.window__handler .window__actions > a {
+	position: relative;
+	display: inline-block;
+	float: left;
+	height: 24px;
+	width: auto;
+	margin: 6px 5px;
+	background: rgba(255, 255, 255, 0.15);
+	color: rgba(255, 255, 255, 0.65);
+	box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0 2px 1px 0 rgba(0, 0, 0, 0.05),
+		inset 0 1px 0 0 rgba(255, 255, 255, 0.075),
+		inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
+	border-radius: 5px;
+	text-align: center;
+	line-height: 24px;
+	overflow: hidden;
+}
+.window__handler .window__actions > a:last-child {
+	margin-right: 0;
+}
+.window__handler .window__actions > a.nav {
+	width: 36px;
+	color: rgba(255, 255, 255, 0.85);
+	line-height: 26px;
+	margin: 6px 0;
+}
+.window__handler .window__actions > a.nav.next:before {
+	content: '';
+}
+.window__handler .window__actions > a.nav.prev {
+	margin-right: 2px;
+}
+.window__handler .window__actions > a.nav.prev:before {
+	content: '';
+}
+.window__handler .window__actions > a.nav.home {
+	margin-left: 8px;
+}
+.window__handler .window__actions > a.nav.home:before {
+	content: '';
+}
+.window__handler .window__actions > a.nav:active {
+	background: rgba(255, 255, 255, 0.25);
+}
+.window__handler .window__actions > a.nav.disabled {
+	color: rgba(255, 255, 255, 0.2);
+}
+.window__handler .window__actions > a.nav.disabled:active {
+	background: rgba(255, 255, 255, 0.15);
+}
+.window__handler .window__actions > a.search {
+	position: relative;
+	float: right;
+	min-width: 200px;
+	background: rgba(255, 255, 255, 0.15);
+}
+.window__handler .window__actions > a.search i {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 26px;
+	height: 100%;
+}
+.window__handler .window__actions > a.search i:before {
+	content: '';
+}
+.window__handler .window__actions > a.search input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: none;
+	border: none;
+	padding: 0 8px 0 26px;
+	color: rgba(255, 255, 255, 0.75);
+	border-radius: 5px;
+	outline: 2px solid #006aff;
+	transition: outline 0.35s ease-in-out;
+}
+.window__handler .window__actions > a.search input:focus {
+	outline: 2px solid rgba(0, 106, 255, 0.35);
+}
+.window__handler .window__options {
+	position: absolute;
+	top: 24px;
+	left: 0;
+	height: 24px;
+	width: 100%;
+}
+.window__handler .window__options > a.option {
+	position: relative;
+	display: inline-block;
+	float: left;
+	height: 100%;
+	width: auto;
+	padding: 0 10px;
+	color: rgba(255, 255, 255, 0.65);
+	text-align: center;
+	line-height: 24px;
+}
+.window__handler .window__options > a.option:before {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 30px;
+	width: calc(100% - 60px);
+	height: 3px;
+	background: rgba(255, 255, 255, 0);
+	border-radius: 5px;
+	transition: 0.1s;
+}
+.window__handler .window__options > a.option:hover:before {
+	left: 10px;
+	width: calc(100% - 20px);
+}
+.window__handler .window__options > a.option.active {
+	color: rgba(255, 255, 255, 0.9);
+}
+.window__handler .window__options > a.option.active:before,
+.window__handler .window__options > a.option.active:hover:before {
+	left: 10px;
+	width: calc(100% - 20px);
+	background: rgba(255, 255, 255, 0.5);
+}
+.window__handler .window__options > a.option:hover:before {
+	background: rgba(255, 255, 255, 0.15);
+}
+
+.window__body {
+	height: calc(100% - 24px);
+}
