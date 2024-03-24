@@ -40,29 +40,18 @@ export const MyComposition: React.FC<z.infer<typeof myCompSchema>> = ({
 	return (
 		<AbsoluteFill className="">
 			<div className="mx-20 my-16 grow relative">
-				<div className="window">
-					<div className="window__handler">
-						<div className="window__title">Parlons Dev</div>
-						<div className="window__controls">
-							<a className="window__close" />
-							<a className="window__minimize" />
-							<a className="window__maximize" />
-						</div>
-					</div>
-
-					<div className="window__body grid grid-cols-2 grid-rows-2 p-4 gap-2">
+				<div className="rounded-md shadow-2xl h-full bg-zinc-800">
+					<div className="h-full grid grid-cols-2 grid-rows-2 p-4 gap-2">
 						{participants.map((p, i) => (
 							<div
 								key={i}
-								className="grid grid-rows-1 rounded relative overflow-hidden"
+								className="grid grid-rows-[1fr,auto] rounded relative overflow-hidden"
+								style={{
+									backgroundColor: p.color,
+								}}
 							>
 								<div className="flex flex-col justify-center items-center relative">
-									<div
-										className="absolute inset-0 opacity-100"
-										style={{
-											backgroundColor: p.color,
-										}}
-									/>
+									<div className="absolute inset-0 opacity-100" />
 
 									<Img
 										src={p.imageSrc}
@@ -75,7 +64,7 @@ export const MyComposition: React.FC<z.infer<typeof myCompSchema>> = ({
 									/>
 								</div>
 
-								<div className="absolute bottom-0 w-full bg-gray-900/20 px-2 py-0.5">
+								<div className="w-full bg-gray-900/20 px-2 py-0.5 text-white">
 									<p>{p.name}</p>
 								</div>
 							</div>
