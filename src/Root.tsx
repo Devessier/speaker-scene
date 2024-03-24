@@ -14,11 +14,12 @@ export const RemotionRoot: React.FC = () => {
 				height={720}
 				schema={myCompSchema}
 				defaultProps={{
+					duration: '0:02:21.888000',
 					segments: [],
 				}}
-				calculateMetadata={async () => {
+				calculateMetadata={async ({defaultProps}) => {
 					const fps = 30;
-					const durationInFrames = fps * (20 * 60 + 38) + 19;
+					const durationInFrames = timeToFrame(defaultProps.duration, fps);
 
 					const speakersForEachFrame = Array.from(
 						{length: durationInFrames},
@@ -44,23 +45,24 @@ export const RemotionRoot: React.FC = () => {
 						const startFrame = timeToFrame(segment.start, fps);
 						const stopFrame = timeToFrame(segment.stop, fps);
 
-						console.log({startFrame, stopFrame});
-
 						for (
 							let frameIndex = startFrame;
-							frameIndex < stopFrame;
+							frameIndex < stopFrame &&
+							/**
+							 * In case the stop frame was not truncated correctly and is outside of the duration of the audio.
+							 */
+							frameIndex < durationInFrames;
 							frameIndex++
 						) {
 							speakersForEachFrame[frameIndex].push(segment.speaker);
 						}
 					}
 
-					console.log({speakersForEachFrame});
-
 					return {
 						fps,
 						durationInFrames,
 						props: {
+							...defaultProps,
 							segments: speakersForEachFrame,
 						},
 					};
