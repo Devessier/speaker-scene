@@ -14,21 +14,15 @@ export const RemotionRoot: React.FC = () => {
 				height={720}
 				schema={myCompSchema}
 				defaultProps={{
-					duration: '0:02:21.888000',
-					segments: [],
+					frames: [],
 				}}
-				calculateMetadata={async ({defaultProps}) => {
+				calculateMetadata={async () => {
 					const fps = 30;
-					const durationInFrames = timeToFrame(defaultProps.duration, fps);
-
-					const speakersForEachFrame = Array.from(
-						{length: durationInFrames},
-						() => [] as string[]
-					);
 
 					const res = await fetch(staticFile('/segmentation.json'));
 					const data = z
 						.object({
+							logs: z.string(),
 							output: z.object({
 								segments: z.array(
 									z.object({
@@ -40,6 +34,23 @@ export const RemotionRoot: React.FC = () => {
 							}),
 						})
 						.parse(await res.json());
+
+					const extractDurationResult =
+						/duration: (?<duration>\d{2}:\d{2}:\d{2}.\d{2,}),/i.exec(data.logs);
+
+					if (typeof extractDurationResult?.groups?.duration !== 'string') {
+						throw new Error('Could not extract the duration');
+					}
+
+					const durationInFrames = timeToFrame(
+						extractDurationResult.groups.duration,
+						fps
+					);
+
+					const speakersForEachFrame = Array.from(
+						{length: durationInFrames},
+						() => [] as string[]
+					);
 
 					for (const segment of data.output.segments) {
 						const startFrame = timeToFrame(segment.start, fps);
@@ -62,8 +73,7 @@ export const RemotionRoot: React.FC = () => {
 						fps,
 						durationInFrames,
 						props: {
-							...defaultProps,
-							segments: speakersForEachFrame,
+							frames: speakersForEachFrame,
 						},
 					};
 				}}

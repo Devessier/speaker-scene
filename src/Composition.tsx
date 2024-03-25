@@ -2,16 +2,11 @@ import {AbsoluteFill, Img, staticFile, useCurrentFrame} from 'remotion';
 import {z} from 'zod';
 
 export const myCompSchema = z.object({
-	duration: z
-		.string()
-		.describe(
-			'In the following format: hours:minutes:seconds.microseconds (sexagesimal format of ffprobe)'
-		),
-	segments: z.array(z.array(z.string())),
+	frames: z.array(z.array(z.string())),
 });
 
 export const MyComposition: React.FC<z.infer<typeof myCompSchema>> = ({
-	segments,
+	frames,
 }) => {
 	const frame = useCurrentFrame();
 
@@ -56,7 +51,7 @@ export const MyComposition: React.FC<z.infer<typeof myCompSchema>> = ({
 										src={p.imageSrc}
 										alt=""
 										className={`size-32 object-cover object-center rounded-full z-10 shadow-md ${
-											segments[frame].includes(p.speakerLabel)
+											frames[frame].includes(p.speakerLabel)
 												? 'ring-4 ring-green-500'
 												: ''
 										}`}
