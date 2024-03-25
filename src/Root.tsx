@@ -1,4 +1,5 @@
 import {Composition, staticFile} from 'remotion';
+import {getAudioData} from '@remotion/media-utils';
 import {z} from 'zod';
 import {MyComposition, myCompSchema} from './Composition';
 import './style.css';
@@ -35,16 +36,9 @@ export const RemotionRoot: React.FC = () => {
 						})
 						.parse(await res.json());
 
-					const extractDurationResult =
-						/duration: (?<duration>\d{2}:\d{2}:\d{2}.\d{2,}),/i.exec(data.logs);
-
-					if (typeof extractDurationResult?.groups?.duration !== 'string') {
-						throw new Error('Could not extract the duration');
-					}
-
-					const durationInFrames = timeToFrame(
-						extractDurationResult.groups.duration,
-						fps
+					const audioData = await getAudioData(staticFile('/podcast.m4a'));
+					const durationInFrames = Math.floor(
+						audioData.durationInSeconds * fps
 					);
 
 					const speakersForEachFrame = Array.from(
