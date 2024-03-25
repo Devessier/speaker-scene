@@ -74,9 +74,9 @@ export const MyComposition: React.FC<z.infer<typeof myCompSchema>> = ({
 						</div>
 					</div>
 				</div>
-
-				<Audio src={staticFile('/podcast.m4a')} />
 			</AbsoluteFill>
+
+			<Audio src={staticFile('/podcast.m4a')} />
 		</>
 	);
 };
