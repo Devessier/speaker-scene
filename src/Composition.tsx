@@ -32,42 +32,51 @@ export const MyComposition: React.FC<z.infer<typeof myCompSchema>> = ({
 	];
 
 	return (
-		<AbsoluteFill className="">
-			<div className="mx-20 my-16 grow relative">
-				<div className="rounded-md shadow-2xl h-full bg-zinc-800">
-					<div className="h-full grid grid-cols-3 grid-rows-1 p-4 gap-2">
-						{participants.map((p, i) => (
-							<div
-								key={i}
-								className="grid grid-rows-[1fr,auto] rounded relative overflow-hidden"
-								style={{
-									backgroundColor: p.color,
-								}}
-							>
-								<div className="flex flex-col justify-center items-center relative">
-									<div className="absolute inset-0 opacity-100" />
+		<>
+			<AbsoluteFill>
+				<Img
+					src={staticFile('/background.jpg')}
+					className="object-cover object-center h-full w-full"
+				/>
+			</AbsoluteFill>
 
-									<Img
-										src={p.imageSrc}
-										alt=""
-										className={`size-32 object-cover object-center rounded-full z-10 shadow-md ${
-											frames[frame].includes(p.speakerLabel)
-												? 'ring-4 ring-green-500'
-												: ''
-										}`}
-									/>
-								</div>
+			<AbsoluteFill>
+				<div className="mx-20 my-16 grow relative">
+					<div className="rounded-md shadow-2xl h-full bg-zinc-800">
+						<div className="h-full grid grid-cols-3 grid-rows-1 p-4 gap-2">
+							{participants.map((p, i) => (
+								<div
+									key={i}
+									className="grid grid-rows-[1fr,auto] rounded relative overflow-hidden"
+									style={{
+										backgroundColor: p.color,
+									}}
+								>
+									<div className="flex flex-col justify-center items-center relative">
+										<div className="absolute inset-0 opacity-100" />
 
-								<div className="w-full bg-gray-900/20 px-2 py-0.5 text-white">
-									<p>{p.name}</p>
+										<Img
+											src={p.imageSrc}
+											alt=""
+											className={`size-32 object-cover object-center rounded-full z-10 shadow-md ${
+												frames[frame].includes(p.speakerLabel)
+													? 'ring-4 ring-green-500'
+													: ''
+											}`}
+										/>
+									</div>
+
+									<div className="w-full bg-gray-900/20 px-2 py-0.5 text-white">
+										<p>{p.name}</p>
+									</div>
 								</div>
-							</div>
-						))}
+							))}
+						</div>
 					</div>
 				</div>
-			</div>
 
-			<Audio src={staticFile('/podcast.m4a')} />
-		</AbsoluteFill>
+				<Audio src={staticFile('/podcast.m4a')} />
+			</AbsoluteFill>
+		</>
 	);
 };
