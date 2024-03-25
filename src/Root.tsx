@@ -37,8 +37,9 @@ export const RemotionRoot: React.FC = () => {
 						.parse(await res.json());
 
 					const audioData = await getAudioData(staticFile('/podcast.m4a'));
-					const durationInFrames = Math.floor(
-						audioData.durationInSeconds * fps
+					const durationInFrames = secondsToFrames(
+						audioData.durationInSeconds,
+						fps
 					);
 
 					const speakersForEachFrame = Array.from(
@@ -76,16 +77,19 @@ export const RemotionRoot: React.FC = () => {
 	);
 };
 
+/**
+ * Parse timecodes in the format "hours:minutes:seconds.milliseconds" to a number of frames.
+ */
 function timeToFrame(time: string, fps: number): number {
 	const [hours, minutes, secondsGroups] = time.split(':');
 	const [seconds, milliseconds] = secondsGroups.split('.');
 
 	return (
 		(Number(hours) * 3600 + Number(minutes) * 60 + Number(seconds)) * fps +
-		mapFloatToFrame(Number(`0.${milliseconds}`), fps)
+		secondsToFrames(Number(`0.${milliseconds}`), fps)
 	);
 }
 
-function mapFloatToFrame(float: number, fps: number) {
+function secondsToFrames(float: number, fps: number) {
 	return Math.floor(float * fps);
 }
