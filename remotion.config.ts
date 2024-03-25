@@ -10,11 +10,7 @@ import {webpackOverride} from './src/webpack-override';
 
 Config.setScale(2);
 
-Config.setVideoImageFormat('png');
-Config.setPixelFormat('yuva444p10le');
-Config.setCodec('prores');
-Config.setProResProfile('4444');
-
+Config.setVideoImageFormat('jpeg');
 Config.setOverwriteOutput(true);
 
 Config.overrideWebpackConfig(webpackOverride);
